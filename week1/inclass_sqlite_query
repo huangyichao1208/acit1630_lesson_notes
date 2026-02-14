@@ -1,0 +1,53 @@
+-- database: ./school.db
+
+-- Use the ▷ button in the top right corner to run the entire file.
+
+SELECT * FROM courses;
+
+select * from students;
+
+-- seclect specifit columns:
+
+select name, program from students;
+
+-- students in computer science
+select * from students where 
+program = 'Computer Science';
+
+-- students with gpa greater than 3.5
+select * from students WHERE
+gpa > 3.5;
+
+-- students aged 20 or younger
+select * from students WHERE
+age <= 20;
+
+-- cs students with gpa above 3.6
+select * from students WHERE
+program = 'Computer Science' 
+and gpa >3.6;
+
+-- first 5 students
+select * from students limit 5;
+
+-- top 3 students 
+select * from students 
+order by gpa desc 
+limit 3;
+
+-- students age between 20 and 22
+select * from students WHERE
+age between 20 and 22;
+
+-- students age between 20 and 22
+select * from students WHERE
+age >= 20 and age <= 22;
+
+-- start from 6th row
+select * from students 
+limit 5 offset 5;
+
+-- select students from computer science or from data science
+select * from students WHERE
+program in 
+('Computer Science', 'Data Science');

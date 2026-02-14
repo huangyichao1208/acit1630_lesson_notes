@@ -1,0 +1,102 @@
+-- database: ./Salesco.db
+
+SELECT * FROM vendor;
+
+-- products prices above the average product price.
+select avg(p_price) from product;
+
+select * from product where p_price > 
+(select avg(p_price) from product);
+
+/*
+how it works
+inner query calculates the single average
+price
+outer query returns products whose price is bigger 
+than that one average value
+*/
+
+-- all the invoices with 
+-- oldest invoice date in the database
+select *from INVOICE
+where inv_date = 
+(select min(inv_date) from invoice);
+
+/*
+customers whose balance is higher than the 
+average customer balance
+*/
+select * from CUSTOMER
+where cus_balance >
+(select avg(cus_balance) from customer);
+
+-- customer who have at least one invoice
+select * from CUSTOMER
+where cus_code in
+(select cus_code from invoice);
+
+/*
+(10014,10011,10012,10011,10018,10014,10015,10011)
+*/
+
+select * from customer c join INVOICE i
+on c.cus_code = i.cus_code;
+
+select distinct c.cus_code,
+c.cus_lname, c.cus_fname
+from customer c join invoice i 
+on c.cus_code = i.cus_code;
+
+-- products that have never been sold
+-- (appear on any invoice line)
+select p_code, p_descript from product
+where p_code in 
+(select p_code from line);
+
+/*
+vendors who supply products that are
+currently below minimum stock
+*/
+
+select v_code, v_name from vendor
+where v_code in (
+    select v_code from product
+    where p_qoh < p_min
+);
+
+-- exists subqueries
+select c.cus_code, c.cus_lname,
+c.cus_fname from customer c 
+where exists (
+    select 1
+    from invoice i
+    where i.cus_code = c.cus_code
+);
+
+/*
+show me all the customers who have 
+at least one invoice
+
+exists - yes/no test
+if the subquery finds at leastt one row,
+exists = true
+if it finds zero rows, exists = false
+*/
+
+-- vendors who have at least one
+-- product in the product table
+
+select v.v_code, v.v_name
+from vendor v
+where exists 
+(select 1
+from product p
+where p.v_code = v.v_code
+);
+
+select v.v_code, v.v_name
+from vendor v
+where v.v_code in
+(select p.v_code from product p
+where p.v_code is not null
+);

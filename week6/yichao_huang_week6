@@ -1,0 +1,193 @@
+-- database: ./Salesco.db
+
+SELECT * FROM CUSTOMER;
+-- database: /Users/roger/Documents/1630/acit1630_lesson_notes/week6/Salesco.db
+
+SELECT * FROM CUSTOMER;
+
+--correlated subqueries
+--(inner query depends on the outer query)
+--these run once per outer row. they are powerful,
+--but can be slower
+
+-- products prices above the average
+--price for their vendor
+
+-- using break-down method to analyze above codes;
+-- 内部select函数依赖外围
+-- 外围算第一行，算内部；外围算第二行，再算内部；依次进行
+-- 内部先看where，然后逐行扫瞄进行计算
+select p.p_code, p.p_descript, p.p_price
+from product p
+where p.p_price >
+(select avg(p2.p_price) from product p2
+where p2.v_code = p.v_code);
+
+-- 下面这个不会出错，但是结果没有用；
+-- “select avg(p2.p_price) from product p2”
+-- 上面产生了很多行，比如7行，数据库只会取第一行与
+-- p_price做比较。
+select p_price from product
+where p_price > 
+(select avg(p2.p_price) from product p2
+ group by p2.v_code);
+
+-- using group by
+-- 先进行join运算，得到了join表，共a*b行
+-- 再看看where行，左右两边是不是固定的值，是不是在表中等等
+-- 最后进行select where操作
+select p.p_code, p.p_descript, p.p_price
+from product p
+join (select v_code, avg(p_price) as avg_price
+from product group by v_code) as v
+on p.v_code = v.v_code
+where p.p_price > avg_price;
+
+--subquery in the from clause
+--derived table/temporary result set
+
+--invoice totals (sum of line items per invoice)
+-- 先group by，再select
+select i.inv_number, i.invoice_total
+from (
+    select inv_number,
+    sum(line_units*line_price) as invoice_total
+    from line
+    group by inv_number
+) as i 
+order by i.invoice_total desc;
+
+-- same as above, but simpler
+select inv_number, sum(line_units*line_price) as invoice_total
+from line
+GROUP BY inv_number 
+order by invoice_total DESC;
+
+-- 以下两个做比较：
+-- 第一个where xx1 > (xx2),xx2代表一个不变的数字
+-- 如果xx2想随着outer的select逐行作变化，那就用第二个作为示例
+select * from product where p_price >
+(select avg(p_price) from product);
+
+select p.p_price from product p where p.p_price >
+(select avg(p2.p_price) from product p2
+where p.v_code = p2.v_code
+);
+
+-- raise prices by 5% for products that have
+-- ever been sold
+-- 内部select p_code from line不依赖外面，先算吧
+-- 上面算完，再看就清晰很多了
+update product
+set p_price = p_price * 1.05
+where p_code in (select p_code from line);
+
+-- delete invoices that have no line items
+-- same1
+-- 先算select inv_number from line
+-- 再逐行算外面的delete+where
+delete from INVOICE
+where inv_number not in 
+(select inv_number from line);
+
+-- same2
+-- 外围第一行，再带入内部计算；外围第二行，再带入内部计算。
+delete from invoice 
+where not exists 
+(
+    select 1 from line 
+    where line.inv_number = invoice.inv_number
+);
+
+
+-- relational set operators
+
+-- union
+
+-- all unique "people name" fron customers +
+-- employees
+select cus_fname || '' || 
+cus_lname as person from CUSTOMER
+union 
+select emp_fname || '' || emp_lname 
+from employee
+order by person;
+
+-- all nuique product codes that appear in either
+-- product or line
+select p_code from product 
+union 
+select p_code from line 
+order by p_code;
+
+-- same as above
+select DISTINCT p_code from product;
+
+-- union all
+-- keeps the duplicates
+select cus_fname || '' || 
+cus_lname as person from CUSTOMER
+union all
+select emp_fname || '' || emp_lname 
+from employee
+order by person;
+
+select cus_fname || '' || 
+cus_lname as person,
+'customers' as source
+from CUSTOMER
+union all
+select emp_fname || '' || emp_lname,
+'employee' as source 
+from employee
+order by person;
+
+--products that have been sold
+--(appear in product and line)
+select p_code from product
+INTERSECT
+select p_code from line
+order by p_code;
+
+--vendors that actually supply at least one product
+select v_code from vendor
+INTERSECT
+select v_code from product
+order by v_code;
+
+select v_code, v_name
+from vendor
+where v_code in (
+    select v_code from vendor
+    INTERSECT
+    select v_code from product
+)
+order by v_code;
+
+-- except (rows in first query but not second)
+
+-- products never sold (in product but not in line)
+
+select p_code from product
+EXCEPT
+select p_code from line
+order by p_code;
+
+-- vendors that do not supply any products
+select v_code from vendor
+EXCEPT
+select v_code from product
+order by v_code;
+
+--selection - filter rows
+-- where clause does this job
+
+-- projection - filter columns
+select cus_code, cus_lname
+from customer;
+
+-- cross join; 
+-- mid term
+
+--rename
+select * from customer as c;

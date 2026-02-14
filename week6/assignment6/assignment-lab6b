@@ -1,0 +1,73 @@
+-- database: ./Salesco.db
+
+SELECT * FROM CUSTOMER;
+-- 1.List all unique full names of 
+-- customers and employees.
+select cus_fname || '' || 
+cus_lname as person from CUSTOMER
+union 
+select emp_fname || '' || emp_lname 
+from employee
+order by person;
+
+-- 2.List all customer + employee full names 
+-- including duplicates, and label the source table.
+select cus_fname || '' || 
+cus_lname as person,
+'customers' as source
+from CUSTOMER
+union all
+select emp_fname || '' || emp_lname,
+'employee' as source 
+from employee
+order by person;
+
+-- 3.List product codes that 
+-- appear in both product and line.
+select p_code from product
+INTERSECT
+select p_code from line
+order by p_code;
+
+-- 4.List product codes that are in 
+-- product but never appear in line.
+select p_code from product
+EXCEPT
+select p_code from line
+order by p_code;
+
+-- 5.Show P_CODE + P_DESCRIPT 
+-- for products never sold.
+select p_code, p_descript
+from product
+where p_code in (
+    select p_code from product
+    EXCEPT
+    select p_code from line
+)
+order by p_code;
+
+-- 6.List vendor codes that appear 
+-- in both vendor and product (vendors supplying products).
+select v_code from vendor
+INTERSECT
+select v_code from product
+order by v_code;
+
+-- 7.List vendor codes 
+-- that are in vendor but not referenced in product.
+select v_code from vendor
+EXCEPT
+select v_code from product
+order by v_code;
+
+-- 8.Return the count of rows 
+-- produced by question #2 (the UNION ALL result).
+select count (*) as "count of rows"
+from 
+(select cus_fname || '' || 
+cus_lname as person
+from CUSTOMER
+union all
+select emp_fname || '' || emp_lname
+from employee) aa;

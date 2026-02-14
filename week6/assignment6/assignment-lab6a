@@ -1,0 +1,127 @@
+-- database: ./beanbyte.db
+
+SELECT * FROM sale_item;
+-- PART A — Scalar Subqueries
+--Q1: List all products whose unit_price 
+--is greater than the average unit price of all products.
+select product_id, name, unit_price
+from product
+where unit_price > 
+(select avg (unit_price) from product);
+
+-- Q2: List all sales that occurred on the earliest 
+-- sale_date in the database.
+select sale_id, sale_date, payment_method
+from sale
+where sale_date =
+(select min(sale_date) from sale);
+
+-- PART B — IN Subqueries
+-- Q3: List all products that have been sold at least once.
+select p.product_id, name, category
+from product p
+where p.product_id IN
+(select s.product_id from sale_item s);
+
+-- Q4: List all suppliers who supply at least one product.
+select su.supplier_id, su.name, su.city
+from supplier su
+where su.supplier_id IN
+(select p.supplier_id from product p);
+
+-- PART C — EXISTS / NOT EXISTS
+-- Q5: List suppliers who do NOT supply 
+-- any products. Must use NOT EXISTS.
+select su.supplier_id, su.name, su.city
+from supplier su
+where not EXISTS
+(select 1
+from product p
+where su.supplier_id = p.supplier_id
+);
+
+-- Q6: List products that have never 
+-- been sold. Must use NOT EXISTS.
+select product_id, name, stock_qty, unit_price
+from product p
+where not EXISTS
+(SELECT 1
+from sale_item sa
+where p.product_id = sa.product_id
+);
+
+-- PART D — Correlated Subqueries
+-- Q7: List products whose unit_price is 
+-- greater than the average unit_price of products in the same category.
+select p.product_id, p.name, p.category,
+p.unit_price
+from product p
+where p.unit_price > 
+(select avg(p1.unit_price) from product p1
+    where p1.category = p.category
+);
+
+-- Q8: From sale_item, list sale items 
+-- where the unit_price is greater than the average sold price for that same product.
+select
+    s.sale_id,
+    s.product_id,
+    s.unit_price,
+    s.quantity
+from sale_item s
+where s.unit_price >
+(
+    select avg(s2.unit_price)
+    from sale_item s2
+    where s2.product_id = s.product_id
+);
+
+-- BONUS — Derived Table Subquery 
+-- Q9: Calculate the total 
+-- amount for each sale (SUM(quantity * unit_price)).
+-- then list sales whose total is greater than the average sale total.
+select s.sale_id,
+       s.sale_date,
+       t.sale_total
+from sale s
+join (
+    select sale_id,
+           sum(quantity * unit_price) as sale_total
+    from sale_item
+    group by sale_id
+) t
+  on s.sale_id = t.sale_id
+where t.sale_total >
+(
+    select avg(sale_total)
+    from (
+        select sale_id,
+               sum(quantity * unit_price) as sale_total
+        from sale_item
+        group by sale_id
+    )
+);
+
+-- another way
+WITH sale_totals AS (
+  SELECT
+    sale_id,
+    SUM(quantity * unit_price) AS sale_total
+  FROM sale_item
+  GROUP BY sale_id
+),
+avg_total AS (
+  SELECT AVG(sale_total) AS avg_sale_total
+  FROM sale_totals
+)
+SELECT
+  s.sale_id,
+  s.sale_date,
+  st.sale_total
+FROM sale s
+JOIN sale_totals st ON st.sale_id = s.sale_id
+CROSS JOIN avg_total a
+WHERE st.sale_total > a.avg_sale_total
+ORDER BY st.sale_total DESC;
+
+

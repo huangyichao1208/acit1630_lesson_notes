@@ -1,0 +1,41 @@
+PRAGMA foreign_keys = ON;
+
+DROP TABLE IF EXISTS sale_item;
+DROP TABLE IF EXISTS sale;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS supplier;
+
+CREATE TABLE supplier (
+  supplier_id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  contact_email TEXT UNIQUE,
+  phone TEXT,
+  city TEXT NOT NULL
+);
+
+CREATE TABLE product (
+  product_id INTEGER PRIMARY KEY,
+  name TEXT NOT NULL,
+  category TEXT NOT NULL CHECK (category IN ('coffee','tea','pastry','sandwich','merch')),
+  unit_price REAL NOT NULL CHECK (unit_price > 0),
+  stock_qty INTEGER NOT NULL DEFAULT 0 CHECK (stock_qty >= 0),
+  supplier_id INTEGER NOT NULL,
+  FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id)
+);
+
+CREATE TABLE sale (
+  sale_id INTEGER PRIMARY KEY,
+  sale_date TEXT NOT NULL,        -- store as ISO date: YYYY-MM-DD
+  payment_method TEXT NOT NULL CHECK (payment_method IN ('cash','card','mobile')),
+  notes TEXT
+);
+
+CREATE TABLE sale_item (
+  sale_id INTEGER NOT NULL,
+  product_id INTEGER NOT NULL,
+  quantity INTEGER NOT NULL CHECK (quantity > 0),
+  unit_price REAL NOT NULL CHECK (unit_price > 0),
+  PRIMARY KEY (sale_id, product_id),
+  FOREIGN KEY (sale_id) REFERENCES sale(sale_id),
+  FOREIGN KEY (product_id) REFERENCES product(product_id)
+);

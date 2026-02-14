@@ -1,0 +1,118 @@
+-- database: ./Salesco.db
+
+SELECT * FROM product;
+
+select p_code, v_code
+from product
+order by v_code;
+
+-- count how many products each vendor supplies
+select v_code, count(*) as product_count
+from product
+group by v_code;
+
+-- show only those vendors who supply more than
+-- 2 products
+select v_code, count(*) as product_count
+from product
+group by v_code
+having count(*) >2; -- where can't be allowed!!
+
+-- count how many products were added on each data
+select p_indate, count(*) AS
+products_added
+from product
+group by p_indate;
+
+-- count products per category per
+-- vendor
+select p_code, v_code, count(*)
+as product_count
+from product
+group by p_code, v_code;
+
+-- number of vendors per area code
+select v_areacode, count(*) as vendor_count
+from vendor
+group by V_AREACODE;
+
+/*
+only consider products priced above 
+$10, then show vendors with an average
+price above $20
+*/
+select v_code, avg(p_price) as avg_price
+from product
+where p_price > 10
+group by V_CODE
+having avg(p_price) > 20;
+
+-- find the max of price in unique v_code
+select v_code, max(p_price) as max_price
+from product
+group by V_CODE;
+
+
+select * from customer;
+select * from invoice;
+-- natural join - 2 tables
+select cus_code, cus_lname, inv_number,
+inv_date
+from customer natural join invoice;
+
+select inv_number, p_code, p_descript,
+line_units, line_price
+from invoice natural join line
+natural join product;
+
+-- join "using"
+select p_code, p_descript,
+v_code, v_name, v_areacode, v_phone
+from product join vendor
+using (v_code);
+
+-- join "on"
+select invoice.inv_number,
+product.p_code, p_descript,
+line_units, line_price
+from invoice join line
+on invoice.inv_number = line.INV_NUMBER
+join product ON
+line.p_code = product.p_code;
+
+
+select p_code, vendor.v_code, v_name
+from product join vendor
+on product.v_code = vendor.v_code;
+
+select p_code, v_code, v_name
+from product join vendor
+using(v_code);
+
+select p_code, v_code, v_name
+from product natural join vendor;
+
+-- old style joins
+select p_code, p_descript, p_price,
+v_name from product, vendor
+where product.v_code = vendor.v_code;
+
+-- not only the same, vendor in addition
+-- will exist in the table
+select p_code, vendor.v_code, V_NAME
+from vendor left join product
+on vendor.v_code = product.v_code;
+
+-- not only the same, product in addition
+-- will exist in the table
+select p_code, vendor.v_code, V_NAME
+from vendor right join product
+on vendor.v_code = product.v_code;
+
+-- p.v_code is much easier, when using
+-- from product P 
+select p_descript, p_price, v_name,
+v_contact, v_areacode, v_phone
+from product P 
+join vendor V 
+on p.v_code = v.v_code;

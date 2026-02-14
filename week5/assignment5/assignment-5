@@ -1,0 +1,75 @@
+-- database: ./beanbyte.db
+
+SELECT * FROM sale_item;
+-- database: ./beanbyte.db
+
+-- database: ./beanbyte.db
+
+SELECT * FROM supplier;
+-- database: ./beanbyte.db
+
+SELECT * FROM supplier;
+
+-- database: ./beanbyte.db
+
+SELECT * FROM product;
+
+-- part d, Question 1 
+select count(*) as 'number of suppliers'
+from supplier;
+
+select count(*) as 'number of products'
+from product;
+
+select count(*) as 'number of sales'
+from sale;
+
+select count(*) as 'number of sale items'
+from sale_item;
+
+-- part d, Question 2
+select name, stock_qty 
+from product
+where stock_qty < 30;
+
+-- part d, Question 3
+select s.sale_date, sum(si.quantity * si.unit_price) as 'totel revenue for that date'
+from sale s join sale_item si
+on s.sale_id = si.sale_id
+group by (s.sale_date);
+
+-- part d, Question 4
+select p.name, sum(s.quantity * s.unit_price) as 'total revenue for that product'
+from product p join sale_item s
+on p.product_id = s.product_id
+group by p.product_id, p.name
+order by sum(s.quantity * s.unit_price) desc limit 5;
+
+-- part d, Question 5
+select p.name, s.quantity, 
+s.unit_price, s.quantity * s.unit_price as 
+'the line total for each product'
+from product p join sale_item s
+on p.product_id = s.product_id
+where s.sale_id = 5;
+
+/*
+part e:
+1 Because product has a foreign key referencing supplier’s primary key,
+ suppliers must exist before products can reference them.
+
+ 2 Because unit_price in sale_item records the actual price at the time of sale.
+Product prices can change, but each sale must preserve its historical transaction price.
+
+3 If foreign keys are violated, the database rejects the operation to maintain referential integrity, 
+preventing wrong records.
+
+4 It can see which products sell best, which bring the most revenue, and sales trends, helping with pricing, 
+promotions, and inventory decisions.
+*/
+
+
+
+
+
+

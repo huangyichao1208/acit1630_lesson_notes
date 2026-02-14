@@ -1,0 +1,109 @@
+-- database: ./Salesco.db
+
+-- STEP 3:
+SELECT * FROM CUSTOMER;
+
+SELECT * FROM vendor;
+
+SELECT * FROM product;
+
+SELECT * FROM employee;
+
+SELECT * FROM emp;
+
+SELECT * FROM INVOICE;
+
+SELECT * FROM line;
+
+-- STEP 4:
+-- Write a SQL query to get back the customer’s name (last, first, and middle initial) and their balance.
+SELECT CUS_LNAME,CUS_FNAME,
+CUS_INITIAL, CUS_BALANCE
+FROM CUSTOMER;
+
+-- Write a SQL query to get back the product’s code, description and price
+SELECT P_CODE,P_DESCRIPT,P_PRICE
+FROM product;
+
+-- From the vendor table, retrieve all rows, but only the vendor name, areacode, phone, and state
+SELECT V_NAME,V_AREACODE,V_PHONE,
+V_STATE
+FROM vendor;
+
+-- STEP 5:
+-- Write a SQL query to list all employees' names sorted by last name:
+SELECT EMP_LNAME, EMP_FNAME, EMP_INITIAL
+FROM employee
+ORDER BY EMP_LNAME;
+
+-- Write a SQL query to see all the customers with the highest outstanding balances at the top.
+SELECT * FROM CUSTOMER 
+ORDER BY CUS_BALANCE DESC;
+
+-- Write a SQL query to show all the products (product code, description and price) ordered with the most expensive on the top
+SELECT P_CODE, P_DESCRIPT, P_PRICE
+FROM product 
+ORDER BY P_PRICE DESC;
+
+-- STEP 6:
+-- Create a query to list the 3 most expensive products.
+SELECT * FROM product
+order by P_PRICE DESC
+LIMIT 3;
+
+-- STEP 7:
+-- Write a query to get the customer with the CUS_CODE equal to 10016.
+SELECT * FROM CUSTOMER
+WHERE CUS_CODE = 10016;
+
+-- Write a query to combine 2 criteria together using the AND operator to give us the customer or customers with the first name of 'James' and last name of 'Brown'.
+SELECT CUS_CODE, CUS_LNAME, CUS_FNAME,
+CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER
+WHERE CUS_LNAME = 'Brown' AND CUS_FNAME = 'James';
+
+-- Write a query that shows customers with the first name of 'Anne' or last name of 'Brown'.
+SELECT CUS_CODE, CUS_LNAME, CUS_FNAME,
+CUS_AREACODE, CUS_PHONE
+FROM CUSTOMER
+WHERE CUS_LNAME = 'Brown' OR CUS_FNAME = 'Anne';
+
+-- Instead we need to use IS NULL.
+SELECT P_CODE, P_DESCRIPT, P_PRICE,
+P_DISCOUNT, V_CODE
+FROM product
+WHERE V_CODE = NULL;
+
+SELECT P_CODE, P_DESCRIPT, P_PRICE,
+P_DISCOUNT, V_CODE
+FROM product
+WHERE V_CODE IS NULL;
+
+-- To show all products that have a vendor, we use IS NOT NULL
+SELECT P_CODE, P_DESCRIPT, P_PRICE,
+P_DISCOUNT, V_CODE
+FROM product
+WHERE V_CODE IS NOT NULL;
+
+-- Create a query find all the vendors in Georgia (GA) and Kentucky (KY) and in order (order by v_state). Use IN operator.
+SELECT V_CODE, V_NAME, V_AREACODE,
+V_PHONE, V_STATE
+FROM vendor
+WHERE V_STATE IN ('GA','KY')
+ORDER BY V_STATE;
+
+-- Write a query to show all employees with a title in 'Ms.', 'Mrs.'
+SELECT * FROM employee
+WHERE EMP_TITLE IN ('Ms.','Mrs.');
+
+--Let's find all the baby boomers (born in 1946 to 1964) in the employee table.
+SELECT EMP_NUM, EMP_LNAME, EMP_FNAME, EMP_DOB, EMP_HIRE_DATE
+FROM employee
+WHERE EMP_DOB between 
+'1946-01-01' and '1964-12-31';
+
+-- Write a query to find all products which have a price between $20 and $ 50.
+SELECT * FROM product
+WHERE P_PRICE between 20 and 50;
+
+

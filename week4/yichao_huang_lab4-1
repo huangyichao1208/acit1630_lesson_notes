@@ -1,0 +1,85 @@
+-- database: ./primary_and_foreign_keys_h_yichao.db
+
+SELECT * FROM test;
+drop TABLE test;
+
+create table bad_design_1 
+(
+first_name text not null,
+last_name text not null,
+grade interger
+);
+
+insert into bad_design_1 
+(first_name, last_name, grade)
+VALUES
+('Zhang', 'Cheng', 88),
+('Mary', 'Silver', 72),
+('Zhang', 'cheng', 60);
+
+drop table person;
+
+create table person 
+(
+    person_id integer primary key,
+    first_name varchar(50) not null,
+    last_name varchar(50) not null
+);
+
+create table pet 
+(
+    pet_id integer primary key,
+    person_id integer not null,
+    name varchar(50) not null,
+    type varchar(50) not null,
+    foreign key(person_id) references person(person_id)
+);
+
+PRAGMA foreign_keys = ON;
+
+-- won't work, because foreign key is turned on
+insert into pet 
+(name,type)
+VALUES
+('Rango', 'Dog');
+
+insert into person
+(first_name, last_name)
+VALUES
+('Alex', 'Sullivan');
+
+insert into pet 
+(person_id, name, type)
+VALUES
+(1,'Rango','Dog');
+
+insert into person
+(first_name,last_name)
+VALUES
+('Yichao','Huang');
+
+delete from person
+where person_id = 2;
+
+insert into person
+(first_name,last_name)
+VALUES
+('Katie','Sylvia'),
+('Penny','Superbark'),
+('Fix-it','Felix'),
+('Gru','Despicable'),
+('Yichao','Huang');
+
+insert into pet 
+(person_id, name, type)
+VALUES
+(2,'Max','Dog'),
+(2,'Duke','Dog'),
+(3,'BOLT','Dog'),
+(3,'Mittens','cat'),
+(3,'Rhino','Hamster'),
+(5,'Kyle','Dog?');
+
+select first_name, last_name, type, name
+from person left join pet
+on person.person_id = pet.person_id;

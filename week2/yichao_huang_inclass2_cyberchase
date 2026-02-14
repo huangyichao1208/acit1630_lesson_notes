@@ -1,0 +1,72 @@
+-- database: ./cyberchase.db
+
+SELECT * FROM episodes;
+-- 1 write a SQL query to list the titles of all episodes in Cyberchase’s original season, Season 1.
+select season, title FROM
+episodes where season =1;
+
+-- 2 list the season number of, and title of, the first episode of every season.
+select season, title, episode_in_season
+from episodes
+where episode_in_season =1;
+
+-- 3 find the production code for the episode “Hackerized!”.
+select production_code, title 
+from episodes
+where title = "Hackerized!";
+
+-- 4 write a query to find the titles of episodes that do not yet have a listed topic
+select title, topic 
+from episodes
+where topic is null;
+
+-- 5 find the title of the holiday episode that aired on December 31st, 2004
+select title, air_date 
+from episodes
+where air_date = '2004-12-31';
+
+-- 6 list the titles of episodes from season 6 (2008) that were released early, in 2007.
+select season, title , air_date
+from episodes
+where season = 6
+and air_date like '2007%';
+
+-- 7 write a SQL query to list the titles and topics of all episodes teaching fractions.
+select title, topic
+from episodes 
+where topic like '%fractions%';
+
+-- 8 write a query that counts the number of episodes released in the last 6 years, from 2018 to 2023, inclusive.
+select count(*) as "the number of episodes"
+from episodes
+where air_date between 
+'2018-01-01' and '2023-12-31';
+
+-- 9 write a query that counts the number of episodes released in Cyberchase’s first 6 years, from 2002 to 2007, inclusive.
+select count(*) as "the number of episodes"
+from episodes
+where air_date between 
+'2002-01-01' and '2007-12-31';
+
+-- 10 write a SQL query to list the ids, titles, and production codes of all episodes. Order the results by production code, from earliest to latest.
+select id, title, production_code
+from episodes
+order by production_code;
+
+-- 11 list the titles of episodes from season 5, in reverse alphabetical order.
+select season, title
+from episodes
+order by title desc;
+
+-- 12 count the number of unique episode titles.
+select count (distinct title) as "the number of unique episode titles"
+from episodes;
+
+
+
+
+
+
+
+
+

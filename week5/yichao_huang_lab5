@@ -1,0 +1,26 @@
+-- database: ./school1.db
+
+SELECT * FROM "table-name";
+create table student(
+    student_id integer primary key, 
+    first_name text not null, 
+    last_name text not null, 
+    email_text unique,
+    status text not_null default 'active' check (status in ('active', 'inactive'))
+);
+
+create table course (
+    curse_id integer primary key,
+    course_code text not null unique,
+    title text not null
+);
+
+create table enrollment (
+    student_id integer not null,
+    course_id integer not null,
+    grade real check(grade is null or (grade>=0 and grade <=100)),
+    primary key (student_id, course_id)
+    foreign key(student_id) references student(student_id),
+    foreign key(course_id) references course(course_id)
+);
+

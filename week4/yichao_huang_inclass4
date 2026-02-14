@@ -1,0 +1,156 @@
+-- database: ./university.db
+
+SELECT * FROM test;
+
+-- in not exists: avoid errors, if the same name file exists
+drop table student;
+
+create table if not exists student(
+    student_id integer primary key,
+    first_name text not null,
+    last_name text not null,
+    email text unique
+);
+
+drop table course;
+create table course (
+    course_id integer primary key,
+    course_code text unique not null,
+    course_title text not null
+);
+
+-- delete and droping
+-- dropping completely drops the table, along with the format
+-- enrollment is the child table
+drop table enrollment;
+create table if not exists enrollment (
+    enrollment_id integer primary key,
+    student_id integer not null,
+    course_id integer not null,
+    grade real, 
+
+    constraint fk_enrollment_student
+    foreign key (student_id) references 
+    student (student_id),
+
+    constraint fk_enrollment_course
+    foreign key (course_id) REFERENCES
+    course (course_id)
+);
+
+
+
+insert into student values
+(1, 'Ava', 'chen', 'ava@gmail.com');
+
+-- errors, auto not implemented
+insert into student VALUES
+("Bob", "Zhang", "bob@outlook.com");
+
+insert into student
+(first_name, last_name, email) VALUES
+('Bob','Zhang','bob@outlook.com');
+
+insert into student
+(email, last_name, first_name) VALUES
+('b1ob@outlook.com','Zhang1','Bob1');
+
+insert into student
+(last_name, first_name) VALUES
+('Zhang2','Bob2');
+
+insert into student
+(first_name, last_name, email)
+VALUES
+('Noah', 'Chen', 'noah@gmail.com'),
+('Mia', 'Patel', 'mia@gmail.com'),
+('Leo', 'Garcia', 'leo@yahoo.com');
+
+insert into course
+(course_code, course_title) VALUES
+('ACIT 1420', 'systems admin'),
+('ACIT 1620', 'web development'),
+('ACIT 1630', 'Database'),
+('ACIT 1515', 'Scripting for it'),
+('math 101', 'math for it');
+
+insert into enrollment
+(student_id, course_id, grade) VALUES
+(1,1,91.5),
+(2,1,84),
+(2,2,88),
+(3,1,79);
+
+insert into enrollment
+(student_id, course_id, grade) 
+select student_id, 3, null
+from student;
+
+insert into enrollment
+(student_id, course_id) VALUES
+(999,1);
+
+delete from enrollment WHERE
+grade is null;
+
+delete from enrollment;
+
+insert into enrollment
+(student_id, course_id, grade) 
+select student_id, 1, null
+from student;
+
+alter table student add COLUMN
+phone text not null;
+
+alter table student add COLUMN
+status text not null default 'active';
+
+insert into student
+(first_name, last_name, email, phone)
+VALUES
+('Noah', 'Chen', 'noah@gmail.com', '303993'),
+('Mia', 'Patel', 'mia@gmail.com', '20439'),
+('Leo', 'Garcia', 'leo@yahoo.com', '20283');
+
+alter table enrollment 
+rename to registration;
+
+update student set phone = '4343242'
+where student_id =1;
+
+update student set 
+phone = '879033940298',
+status = 'inactive'
+where student_id = 2;
+
+update student
+set status = 'inactive';
+
+update student set status = 
+'inactive' where email is null;
+
+update registration
+set grade = min (grade+5, 100)
+where course_id =1 
+and grade is not null;
+
+
+-- wrong! can't do this
+delete from course
+where course_id =1 ;
+
+delete from registration WHERE
+grade is null;
+
+delete from registration
+where course_id in (2,3,4);
+
+select * from course
+where course_code = 'ACIT 1420'
+or course_code = 'ACIT 1620' OR
+course_code = 'ACIT 1630';
+
+select * from course
+where course_code in ('ACIT 1420','ACIT 1620','ACIT 1630');
+

@@ -1,0 +1,150 @@
+-- database: ./Salesco.db
+
+-- dflt_value: default value
+pragma table_info(product);
+
+SELECT * FROM product;
+
+-- space exists,use ""; 'as' is not necessary
+SELECT P_CODE, P_DESCRIPT as description,
+P_PRICE as "Unit Price", P_QOH QTY
+from product;
+
+select 5*6 as "Muliplication";
+
+-- using computed columns
+select p_descript, p_qoh, p_price,
+p_qoh*p_price as "total cost"
+from product;
+
+--date arithmetic:
+select date('now') as "today's date";
+select time('now');
+select time('now','localtime');
+
+-- add days, months and years
+select date('2026-01-15','+10 days');
+select date('2026-01-15','+2 months');
+select date('2026-01-15','+1 year');
+
+-- subtract days, months
+select date('2026-01-15','-7 days');
+select date('2026-01-15','-1 month');
+
+-- multiple modifiers (order matters)
+select date('2024-01-31','+1 month','-1 day');
+
+select date('2024-01-31','+30 days');
+
+select date('2024-01-31','+31 days');
+
+-- go to the end of next month
+select date('2024-01-31', 'start of month', 
+'+2 months','-1 day');
+
+-- working with datetime
+select datetime('now', 'localtime','+3 hours');
+
+select datetime('2026-01-15 14:34:00', '+90 minutes');
+
+--using date arithmetic with table data
+select p_code, p_descript,
+date(p_indate, '+30 days')
+as "due date" from product;
+
+-- difference in date ranges
+select julianday('2024-01-20') -
+julianday('2024-01-10') as "days between";
+
+select julianday('2024-01-15 14:42:08') -
+julianday('2024-01-10 14:42:00') as "days between";
+
+-- end and start of periods
+-- start of current month
+select date('now','start of month');
+-- end of current month
+select date('now','start of month', '+1 month',
+'-1 day');
+-- start of year
+select date('now','start of year');
+
+--list unique values
+select distinct v_code 
+from product;
+
+select p_code, p_descript, p_qoh,
+p_price from product
+order by p_price desc;
+
+/*
+multiple lines
+of comments.
+Cascading order sequence
+• 1. ORDER BY last name
+• 2. Within matching last names, ORDER BY first name
+• 3. Within matching first and last names, ORDER BY middle initial
+*/
+select emp_lname, emp_fname,
+emp_initial, emp_areacode, emp_phone
+from employee
+order by emp_lname, emp_fname, emp_initial;
+
+select * from employee;
+
+select p_descript, p_qoh, p_price,
+p_qoh*p_price as "total cost"
+from product
+order by "total cost" desc;
+
+select * from product 
+where v_code = 21344;
+
+select * from product 
+where v_code <> 21344;
+
+select * from product 
+where v_code != 21344;
+
+select * from product 
+where not(v_code = 21344);
+
+select * from product 
+where date(p_indate) > '2018-01-15';
+
+select * from vendor
+where v_contact like 
+'smith%';
+
+select * from vendor
+where v_contact like 
+'smith';
+
+select * from vendor
+where v_contact like 
+'smiths_n';
+
+-- is, not =;
+select * from product
+where v_code is null;
+
+-- aggregate functions:
+select count(*) from product;
+select count(p_code) from product;
+
+select count (*) from product
+where p_price < 10;
+
+select count(v_code) from product;
+
+select count(distinct v_code)
+from product;
+
+select sum(cus_balance) as "totalbalance"
+from customer;
+
+select sum (p_qoh * p_price)
+as totalvalue from product;
+
+select min(p_price), max(p_price),
+avg(p_price) from product;
+
