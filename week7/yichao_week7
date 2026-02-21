@@ -1,0 +1,44 @@
+-- database: ./wup.db
+
+drop table test;
+
+SELECT * FROM test
+pragma foreign_keys = on;
+create table supplier (
+    supplier_id integer primary key,
+    name text not null,
+    city text
+);
+
+drop table product;
+
+-- delete cascade and update cascade
+create table product (
+    product_id integer primary key,
+    name text not null,
+    unit_price real,
+    foeign key supplier_id REFERENCES 
+    supplier(supplier_id) 
+    on delete cascade
+    on update cascade
+);
+
+INSERT INTO supplier values 
+(1,'beanco','vancouver');
+
+insert into supplier VALUES
+(2,'coffeeworld','Toronto');
+
+insert into product VALUES
+(101,'express',18.99,1);
+insert into product VALUES
+(102,'dark roast',16.99,1);
+insert into product VALUES
+(103,'latte',9.99,2);
+
+delete from supplier 
+where supplier_id = 1;
+
+update supplier set supplier_id = 10
+where supplier_id = 1;
+

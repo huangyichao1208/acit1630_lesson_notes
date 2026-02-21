@@ -1,0 +1,5 @@
+flight_id,airline,origin,destination,departure_time,price
+1,SkyJet Airways,New York (JFK),London (LHR),2025-05-15 08:00,650.00
+2,Oceanic Airlines,Toronto (YYZ),Vancouver (YVR),2025-06-20 14:30,450.00
+3,Air Nova,Los Angeles (LAX),Chicago (ORD),2025-07-10 18:45,350.00
+4,Pacific Wings,Sydney (SYD),Tokyo (HND),2025-08-01 22:15,800.00
