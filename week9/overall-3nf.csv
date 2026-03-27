@@ -1,0 +1,4 @@
+enrollment_id,student_id,student_name,student_address,course_id,course_name,instructor_id,instructor_name,,
+1,101,Alice Brown,123 Oak St,CSE101,Databases,9001,Dr. Smith,,
+2,102,Bob White,456 Pine St,CSE102,Networking,9002,Dr. Johnson,,
+3,101,Alice Brown,123 Oak St,CSE102,Networking,9002,Dr. Johnson,,

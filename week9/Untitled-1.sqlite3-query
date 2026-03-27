@@ -1,0 +1,139 @@
+-- database: ./normalization_lastnameInitial_firstname.db
+
+
+PRAGMA foreign_keys = ON;
+SELECT * FROM Children;
+drop table Emplyee;
+
+select * from Employee;
+
+select * from Children;
+
+drop table orders;
+
+create table orders 
+(
+    customer_numb integer,
+    first_name text,
+    last_name text,
+    street text,
+    city text,
+    state text,
+    zip text,
+    phone text,
+    order_numb integer not null,
+    order_date datetime,
+    item_numb integer not null,
+    title text,
+    price real,
+    has_shipped text,
+    PRIMARY KEY (order_numb, item_numb)
+);
+
+INSERT INTO orders
+ (customer_numb, first_name, last_name, street, city, state, zip, phone)
+  VALUES (2001, 'Alice', 'Brown', '123 Maple St', 'New York', 'NY', '10001', '123-456-7890');
+
+  INSERT INTO orders (item_numb, title, price)
+  VALUES (5001, 'Wireless Mouse', 29.99);
+  drop table orders;
+
+
+  delete from Children;
+
+  delete from orders WHERE
+  order_numb = 2002;
+
+delete from orders WHERE
+order_numb = 2003;
+
+delete from orders WHERE
+customer_numb = 1004;
+
+UPDATE orders
+SET street = '789 New Ave', city = 'Boston', state = 'MA', zip = '02108', phone = '555-9876'
+WHERE customer_numb = 1001;
+
+UPDATE orders
+SET street = '123 Elm street', city = 'Springfield', state = 'IL', zip = '62704', phone = '555-9876'
+WHERE order_numb = 2001 AND item_numb = 5001;
+
+create table customer
+(
+    customer_numb integer PRIMARY KEY,
+    first_name text,
+    last_name text,
+    street text,
+    city text,
+    state text,
+    zip text,
+    phone text
+);
+
+create table item
+(
+    item_numb integer PRIMARY KEY,
+    title text,
+    price REAL
+);
+
+drop table orders;
+
+create table orders
+(
+    order_numb INTEGER PRIMARY KEY,
+    customer_numb integer,
+    order_date datetime,
+    FOREIGN KEY (customer_numb) REFERENCES customer (customer_numb)
+);
+
+create table order_items
+(
+    order_numb integer,
+    item_numb integer,
+    has_shipped text,
+    PRIMARY KEY (order_numb, item_numb),
+    FOREIGN KEY (order_numb) REFERENCES orders (order_numb)
+    on update CASCADE
+    on DELETE CASCADE,
+    FOREIGN KEY (item_numb) REFERENCES item (item_numb)
+    on update CASCADE
+    on DELETE CASCADE
+
+);
+
+create table students 
+(
+    student_id integer PRIMARY KEY,
+    student_name text,
+    student_address text
+);
+
+create table instructors 
+(
+    instructor_id integer PRIMARY KEY,
+    instructor_name text
+);
+drop table courses;
+create table courses 
+(
+    course_id PRIMARY KEY,
+    course_name text,
+    instructor_id integer,
+    FOREIGN KEY (instructor_id) REFERENCES instructors (instructor_id)
+    on delete CASCADE
+    on update CASCADE
+);
+drop table enrollments;
+create table enrollments 
+(
+    enrollment_id integer PRIMARY KEY,
+    student_id integer,
+    course_id text,
+    FOREIGN KEY (student_id) REFERENCES students (student_id)
+    on delete CASCADE
+    on update CASCADE,
+    FOREIGN KEY (course_id) REFERENCES courses (course_id)
+    on delete CASCADE
+    on update CASCADE
+);

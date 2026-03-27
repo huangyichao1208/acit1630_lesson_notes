@@ -1,0 +1,17 @@
+Task_Id,Task_Date,Project_Id,Staff_ID,Task_Description,Task_Cost_Per_Hour,Task_Hours,Total_Charge
+301,2024-01-10,201,1,Develop AI Model,60.0,30,1500.0
+302,2024-02-05,202,2,Conduct HR Training,50.0,20,800.0
+303,2024-03-12,203,3,Financial Budget Analysis,60.0,25,1500.0
+304,2024-04-08,204,4,Create Ad Campaign,55.0,35,1925.0
+305,2024-05-14,205,5,Automate Order Processing,70.0,40,2800.0
+306,2024-06-21,206,6,Compliance Risk Assessment,65.0,20,1300.0
+307,2024-07-30,207,7,Analyze Sales Data,50.0,30,1500.0
+308,2024-08-15,208,8,Assess Supplier Performance,55.0,25,1125.0
+309,2024-09-10,209,9,Research Market Trends,55.0,40,2200.0
+310,2024-10-05,210,10,Security Penetration Testing,75.0,45,3375.0
+311,2024-11-01,201,1,Enhance AI Algorithm,65.0,25,1375.0
+312,2024-11-10,202,2,Revise Training Manual,52.0,15,630.0
+313,2024-11-15,201,1,Test AI Model Performance,60.0,30,1800.0
+314,2024-11-20,205,5,Deploy Automation System,75.0,40,3000.0
+315,2024-11-25,207,7,Create Sales Reports,50.0,22,1100.0
+316,2024-11-30,202,2,Conduct Employee Workshop,55.0,18,810.0

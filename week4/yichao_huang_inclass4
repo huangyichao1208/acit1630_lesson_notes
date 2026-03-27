@@ -104,7 +104,8 @@ alter table student add COLUMN
 phone text not null;
 
 alter table student add COLUMN
-status text not null default 'active';
+status text not null default 'active'
+check (status in ('active','inactive'));
 
 insert into student
 (first_name, last_name, email, phone)

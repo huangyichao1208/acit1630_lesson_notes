@@ -1,0 +1,6 @@
+customer_numb,first_name,last_name,street,city,state,zip,phone,order_numb,order_date,item_numb,title,price,has_shipped
+1001,Jane,Doe,123 Elm St,Springfield,IL,62704,555-1234,2001,2024-03-01,5001,Laptop,999.99,1
+1001,Jane,Doe,123 Elm St,Springfield,IL,62704,555-1234,2001,2024-03-01,5002,Wireless Mouse,29.99,1
+1002,John,Smith,456 Oak St,Chicago,IL,60616,555-5678,2002,2024-03-02,5003,Mechanical Keyboard,89.99,0
+1003,Alice,Brown,789 Pine St,Seattle,WA,98101,555-9012,2003,2024-03-03,5004,Gaming Headset,79.99,1
+1004,David,Miller,567 Birch St,Los Angeles,CA,90001,555-7890,2004,2024-03-04,5005,SmartWatch,199.99,1

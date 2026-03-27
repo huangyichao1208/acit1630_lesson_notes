@@ -19,7 +19,7 @@ create table enrollment (
     student_id integer not null,
     course_id integer not null,
     grade real check(grade is null or (grade>=0 and grade <=100)),
-    primary key (student_id, course_id)
+    primary key (student_id, course_id),
     foreign key(student_id) references student(student_id),
     foreign key(course_id) references course(course_id)
 );

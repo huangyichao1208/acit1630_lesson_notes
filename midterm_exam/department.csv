@@ -1,0 +1,11 @@
+Dept_Code,Dept_Name,Dept_Budget,Dept_Location
+101,IT,500000.0,New York
+102,HR,200000.0,San Francisco
+103,Finance,300000.0,Chicago
+104,Marketing,250000.0,Los Angeles
+105,Operations,400000.0,Boston
+106,Legal,180000.0,Washington D.C.
+107,Sales,220000.0,Miami
+108,Procurement,320000.0,Seattle
+109,Research,600000.0,Austin
+110,Security,280000.0,Denver

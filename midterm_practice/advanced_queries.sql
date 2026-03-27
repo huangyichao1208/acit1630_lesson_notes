@@ -81,11 +81,12 @@ where price > (
 --tickets for more than one flight.
 -- Output: passenger_id, name
 -- Requirement: Use GROUP BY + HAVING OR a correlated subquery.
-select p.passenger_id, p.name from Passengers p
-join Tickets t
-on p.passenger_id = t.passenger_id
-group by p.passenger_id
-having p.passenger_id >1;
+SELECT p.passenger_id, p.name
+FROM passengers p
+JOIN tickets t ON t.passenger_id = p.passenger_id
+GROUP BY p.passenger_id, p.name
+HAVING COUNT(DISTINCT t.flight_id) > 1;
+
 
 -- 5-8 Find the most expensive flight(s).
 -- Output: flight_id, airline, origin, destination, price

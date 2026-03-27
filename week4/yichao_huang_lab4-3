@@ -51,7 +51,7 @@ create table person
     first_name varchar(15) not null,
     last_name varchar(15) not null,
     birth_date datetime not null,
-    death_date datetime
+    death_date datetime,
     constraint CK_Valid_dates
     check (birth_date<=death_date) 
 );
