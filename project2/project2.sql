@@ -362,16 +362,22 @@ where pc.post_id = p.post_id) as comments
 from post p;
 
 -- 14.List photos as either profile photos or post photos.
-select p.photo_id, p.caption, p.file_name,
-(select ('Profile Photo') from person pe
-where p.photo_id = pe.profile_photo_id) as type
-from photo p
-where type is not null
-union 
-select p.photo_id, p.caption, p.file_name, 
-(select ('Post Photo') from person pe
-where p.photo_id not in (SELECT profile_photo_id FROM person WHERE profile_photo_id IS NOT NULL)) as type
-from photo p
-where type is not null
-order by type desc;
+SELECT p.photo_id, p.caption, p.file_name, 'Profile Photo' AS type
+FROM photo p
+WHERE p.photo_id IN (
+    SELECT profile_photo_id
+    FROM person
+    WHERE profile_photo_id IS NOT NULL
+)
+
+UNION ALL
+
+SELECT p.photo_id, p.caption, p.file_name, 'Post Photo' AS type
+FROM photo p
+WHERE p.photo_id NOT IN (
+    SELECT profile_photo_id
+    FROM person
+    WHERE profile_photo_id IS NOT NULL
+)
+ORDER BY type DESC;
 
