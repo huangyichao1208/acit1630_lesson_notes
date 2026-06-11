@@ -1,9 +1,9 @@
--- database: ./project_2.db
+-- database: ./project2.db
 
 PRAGMA foreign_keys = ON; 
 
 -- create db file
--- sqlite3 project_2.db
+-- sqlite3 project2.db
 
 -- create table, 9 tables in total
 drop table if exists photo; 
@@ -380,4 +380,3 @@ WHERE p.photo_id NOT IN (
     WHERE profile_photo_id IS NOT NULL
 )
 ORDER BY type DESC;
-

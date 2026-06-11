@@ -35,6 +35,7 @@ BEGIN
     datetime('now'));
 end;
 
+
 insert into students (name, age)
 VALUES
 ('Alice',19),
@@ -45,6 +46,7 @@ VALUES
 ('Alice1',19);
 
 delete from students;
+
 
 -- update trigger
 create trigger prevent_age_reduction
@@ -77,3 +79,16 @@ BEGIN
 end;
 
 delete from students where id = 1;
+
+-- Example: Log and update another table
+CREATE TRIGGER update_employee_count
+AFTER INSERT ON staff
+FOR EACH ROW
+BEGIN
+    UPDATE department_summary
+    SET employee_count = employee_count + 1
+    WHERE dept_id = NEW.dept_id;
+
+    INSERT INTO employee_log (emp_id, action, log_time)
+    VALUES (NEW.staff_id, 'STAFF ADDED', datetime('now'));
+END;
